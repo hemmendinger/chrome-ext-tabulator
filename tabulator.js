@@ -1,12 +1,13 @@
-;(function () {
+;
+(function () {
     'use strict';
 
     // from the array of Tab objects it makes an object with date and the array
     function makeTabGroup(tabsArr) {
         var tabGroup = {
-                date: new Date(),
-                id: Date.now() // clever way to quickly get a unique ID
-            };
+            date: new Date(),
+            id: Date.now() // clever way to quickly get a unique ID
+        };
 
         tabGroup.tabs = tabsArr;
 
@@ -27,9 +28,9 @@
                 newArr = storage.tabGroups;
                 newArr.push(tabGroup);
 
-                chrome.storage.sync.set({ tabGroups: newArr });
+                chrome.storage.sync.set({tabGroups: newArr});
             } else {
-                chrome.storage.sync.set({ tabGroups: [ tabGroup ] });
+                chrome.storage.sync.set({tabGroups: [tabGroup]});
             }
         });
     }
@@ -59,25 +60,25 @@
     }
 
     function openBackgroundPage() {
-        chrome.tabs.create({ url: chrome.extension.getURL('tabulator.html') });
+        chrome.tabs.create({url: chrome.extension.getURL('tabulator.html')});
     }
 
     // listen for messages from popup
     chrome.runtime.onMessage.addListener(function (req, sender, sendRes) {
         switch (req.action) {
-        case 'save':
-            saveTabs(req.tabsArr);
-            openBackgroundPage(); // opening now so window doesn't close
-            closeTabs(req.tabsArr);
-            sendRes('ok'); // acknowledge
-            break;
-        case 'openbackgroundpage':
-            openBackgroundPage();
-            sendRes('ok'); // acknowledge
-            break;
-        default:
-            sendRes('nope'); // acknowledge
-            break;
+            case 'save':
+                saveTabs(req.tabsArr);
+                openBackgroundPage(); // opening now so window doesn't close
+                closeTabs(req.tabsArr);
+                sendRes('ok'); // acknowledge
+                break;
+            case 'openbackgroundpage':
+                openBackgroundPage();
+                sendRes('ok'); // acknowledge
+                break;
+            default:
+                sendRes('nope'); // acknowledge
+                break;
         }
     });
 
